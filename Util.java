@@ -8,7 +8,7 @@ public class Util
     {
     }
 
-    private void closeConnection(java.sql.Connection conn)
+    public static void closeConnection(java.sql.Connection conn)
     {
         if (conn != null)
         {
@@ -24,7 +24,7 @@ public class Util
     }
                 
     
-    public void closeStatement(java.sql.Statement statement)
+    public static void closeStatement(java.sql.Statement statement)
     {
         if (statement != null)
         {
@@ -39,7 +39,7 @@ public class Util
         }
     }
 
-    public void closeResultSet(java.sql.ResultSet resultSet)
+    public static void closeResultSet(java.sql.ResultSet resultSet)
     {
         if (resultSet != null)
         {
