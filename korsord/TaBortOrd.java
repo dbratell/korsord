@@ -6,7 +6,7 @@ import javax.servlet.*;
 import javax.servlet.http.*;
 import java.sql.*;
 import javax.sql.*;
-
+import sarasas.Util;
 
 
 public class TaBortOrd
@@ -36,82 +36,44 @@ public class TaBortOrd
         Connection conn =
             DriverManager.getConnection(DATABASE_URL, "", "");       
 
-        for (int i = 0; i < words.length; i++)
+        try
         {
-            String word = words[i];
-
-            int wordLength = word.length();
-            
-            String tableName = TABLE_NAME_PREFIX+wordLength;
-
-            System.out.println("Tabell: "+tableName);
-
-            PreparedStatement statement = null;
-            //            ResultSet resultSet = null;
-            try
+            for (int i = 0; i < words.length; i++)
             {
-                // Allocate and use a connection from the pool          
-                //  ... use this connection to access the database ...
-                String sqlQuery =
-                    "DELETE FROM "+ tableName +  " WHERE "+COLUMN_NAME +
-                    "='"+sqlEscape(word.toLowerCase())+"'";
-                statement = conn.prepareStatement(sqlQuery);
-                int rowCount = statement.executeUpdate();
-
-                System.out.println(word+": deleted "+rowCount+" lines.");
-            }
-            finally
-            {
-                closeStatement(statement);
-            }
-        }
-    }
-
-    private void closeConnection(Connection conn)
-    {
-        if (conn != null)
-        {
-            try
-            {
-                conn.close();
-            }
-            catch (SQLException sqle)
-            {
-                // Don't care. Can't do anything anyway.
-            }
-        }
-    }
+                String word = words[i];
                 
-    
-    private void closeStatement(Statement statement)
-    {
-        if (statement != null)
+                int wordLength = word.length();
+                
+                String tableName = TABLE_NAME_PREFIX+wordLength;
+                
+                System.out.println("Tabell: "+tableName);
+                
+                PreparedStatement statement = null;
+                //            ResultSet resultSet = null;
+                try
+                {
+                    // Allocate and use a connection from the pool          
+                    //  ... use this connection to access the database ...
+                    String sqlQuery =
+                        "DELETE FROM "+ tableName +  " WHERE "+COLUMN_NAME +
+                        "='"+sqlEscape(word.toLowerCase())+"'";
+                    statement = conn.prepareStatement(sqlQuery);
+                    int rowCount = statement.executeUpdate();
+                    
+                    System.out.println(word+": deleted "+rowCount+" lines.");
+                }
+                finally
+                {
+                    Util.closeStatement(statement);
+                }
+            }
+        }
+        finally
         {
-            try
-            {
-                statement.close();
-            }
-            catch (SQLException sqle)
-            {
-                // Don't care. Can't do anything anyway.
-            }
+            Util.closeConnection(conn);
         }
     }
 
-    private void closeResultSet(ResultSet resultSet)
-    {
-        if (resultSet != null)
-        {
-            try
-            {
-                resultSet.close();
-            }
-            catch (SQLException sqle)
-            {
-                // Don't care. Can't do anything anyway.
-            }
-        }
-    }
     private String sqlEscape(String unsafeString)
     {
         StringBuffer safe = new StringBuffer();

@@ -6,7 +6,7 @@ import javax.servlet.*;
 import javax.servlet.http.*;
 import java.sql.*;
 import javax.sql.*;
-
+import sarasas.Util;
 
 
 public class ListaOrd
@@ -63,56 +63,10 @@ public class ListaOrd
             }
             finally
             {
-                closeResultSet(resultSet);
-                closeStatement(statement);
+                Util.closeResultSet(resultSet);
+                Util.closeStatement(statement);
             }
         }
         out.close();
-    }
-
-    private void closeConnection(Connection conn)
-    {
-        if (conn != null)
-        {
-            try
-            {
-                conn.close();
-            }
-            catch (SQLException sqle)
-            {
-                // Don't care. Can't do anything anyway.
-            }
-        }
-    }
-                
-    
-    private void closeStatement(Statement statement)
-    {
-        if (statement != null)
-        {
-            try
-            {
-                statement.close();
-            }
-            catch (SQLException sqle)
-            {
-                // Don't care. Can't do anything anyway.
-            }
-        }
-    }
-
-    private void closeResultSet(ResultSet resultSet)
-    {
-        if (resultSet != null)
-        {
-            try
-            {
-                resultSet.close();
-            }
-            catch (SQLException sqle)
-            {
-                // Don't care. Can't do anything anyway.
-            }
-        }
     }
 }
